@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eshan Ai - Your Intelligent AI Assistant</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            blue: '#0a84ff',
+                            'blue-light': '#38bdf8',
+                            'blue-dark': '#0052cc',
+                            gold: '#ffd700',
+                            'gold-light': '#ffe57f',
+                            'gold-dark': '#b78103',
+                            bg: '#080c14',
+                            surface: '#0f172a',
+                            card: '#162032',
+                            border: '#1e293b'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'gold-gradient': 'linear-gradient(135deg, #FFD700 0%, #D4AF37 50%, #B78103 100%)',
+                        'blue-gradient': 'linear-gradient(135deg, #38BDF8 0%, #0A84FF 50%, #0052CC 100%)',
+                        'brand-gradient': 'linear-gradient(135deg, #0A84FF 0%, #00D2FF 40%, #FFD700 100%)',
+                        'glass-gradient': 'linear-gradient(180deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.8) 100%)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #080c14;
+            color: #f8fafc;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #080c14;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0a84ff;
+        }
+
+        /* Gold metallic text glow */
+        .text-gold-glow {
+            color: #ffd700;
+            text-shadow: 0 0 12px rgba(255, 215, 0, 0.35);
+        }
+
+        /* Blue metallic text glow */
+        .text-blue-glow {
+            color: #38bdf8;
+            text-shadow: 0 0 12px rgba(56, 189, 248, 0.35);
+        }
+
+        /* Glassmorphism styling */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-card {
+            background: rgba(22, 32, 50, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(56, 189, 248, 0.12);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(255, 215, 0, 0.3);
+            box-shadow: 0 8px 30px rgba(10, 132, 255, 0.15);
+        }
+
+        .gold-border-glow {
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+            border: 1px solid rgba(255, 215, 0, 0.4);
+        }
+
+        .blue-border-glow {
+            box-shadow: 0 0 15px rgba(10, 132, 255, 0.2);
+            border: 1px solid rgba(10, 132, 255, 0.4);
+        }
+
+        /* Pulse Animations */
+        @keyframes subtlePulse {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.02); }
+        }
+        .animate-subtle-pulse {
+            animation: subtlePulse 3s infinite ease-in-out;
+        }
+
+        /* Shimmer Loading Effect */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .shimmer {
+            background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,215,0,0.1) 50%, rgba(255,255,255,0.03) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+
+        /* Typing Dots */
+        .typing-dot {
+            animation: typingAnimation 1.4s infinite ease-in-out both;
+        }
+        .typing-dot:nth-child(1) { animation-delay: 0s; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingAnimation {
+            0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased selection:bg-brand-blue selection:text-white">
+
+    <!-- TOP HEADER / NAVBAR -->
+    <header class="sticky top-0 z-50 glass-panel border-b border-slate-800/80 px-4 lg:px-8 py-3 transition-all duration-300">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            
+            <!-- Brand Logo & Title -->
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('chat')">
+                <!-- SVG Animated Replica of Eshan Ai Logo -->
+                <div class="relative w-11 h-11 flex items-center justify-center rounded-full p-[2px] bg-gradient-to-tr from-brand-blue via-brand-blue-light to-brand-gold shadow-lg shadow-brand-blue/20">
+                    <div class="w-full h-full bg-slate-950 rounded-full flex items-center justify-center relative overflow-hidden">
+                        <svg class="w-8 h-8" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Outer Ring Gradient -->
+                            <circle cx="50" cy="50" r="44" stroke="url(#blueGoldGrad)" stroke-width="3" stroke-linecap="round" stroke-dasharray="210 60"/>
+                            <!-- EA Stylized Typography -->
+                            <path d="M 28 32 L 52 32 M 28 32 L 28 68 L 52 68 M 28 50 L 46 50" stroke="#0A84FF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M 52 68 L 68 32 L 80 68 M 58 56 L 74 56" stroke="#FFD700" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                            <!-- Swoosh Wave -->
+                            <path d="M 20 52 C 35 42, 65 62, 82 50" stroke="url(#swooshGrad)" stroke-width="3.5" stroke-linecap="round"/>
+                            <defs>
+                                <linearGradient id="blueGoldGrad" x1="0" y1="0" x2="100" y2="100">
+                                    <stop offset="0%" stop-color="#0A84FF"/>
+                                    <stop offset="100%" stop-color="#FFD700"/>
+                                </linearGradient>
+                                <linearGradient id="swooshGrad" x1="0" y1="0" x2="100" y2="0">
+                                    <stop offset="0%" stop-color="#0A84FF"/>
+                                    <stop offset="100%" stop-color="#FFD700"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex items-center space-x-1.5">
+                        <span class="font-display font-extrabold text-2xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-300 to-amber-300">
+                            Eshan
+                        </span>
+                        <span class="font-display font-extrabold text-2xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-yellow-500">
+                            Ai
+                        </span>
+                        <span class="bg-gradient-to-r from-amber-500/20 to-yellow-500/20 text-amber-300 text-[10px] font-semibold px-2 py-0.5 rounded-full border border-amber-500/30">
+                            PRO
+                        </span>
+                    </div>
+                    <p class="text-[11px] text-slate-400 font-medium tracking-wide flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        Universal Intelligence Studio
+                    </p>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <nav class="hidden md:flex items-center bg-slate-900/80 p-1.5 rounded-xl border border-slate-800">
+                <button id="nav-chat-btn" onclick="switchTab('chat')" class="flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 bg-gradient-to-r from-brand-blue to-blue-600 text-white shadow-md">
+                    <i class="fa-solid fa-comments"></i>
+                    <span>Eshan Assistant</span>
+                </button>
+                <button id="nav-studio-btn" onclick="switchTab('studio')" class="flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-amber-300 transition-all duration-200">
+                    <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
+                    <span>Photo Studio & Gen</span>
+                </button>
+            </nav>
+
+            <!-- User Auth Controls & Google Login -->
+            <div class="flex items-center space-x-3">
+                <div id="user-profile-area" class="hidden items-center space-x-3 bg-slate-900/90 px-3 py-1.5 rounded-xl border border-slate-800">
+                    <img id="user-avatar" src="https://lh3.googleusercontent.com/a/default-user" alt="User Avatar" class="w-8 h-8 rounded-full border border-amber-400/50 object-cover">
+                    <div class="text-left hidden sm:block">
+                        <div id="user-name" class="text-xs font-semibold text-slate-200">Logged User</div>
+                        <div class="text-[10px] text-amber-400 font-medium">Free Access Granted</div>
+                    </div>
+                    <button onclick="handleGoogleSignOut()" title="Sign Out" class="text-slate-400 hover:text-red-400 text-xs p-1 transition-colors">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </div>
+
+                <button id="google-login-btn" onclick="handleGoogleSignIn()" class="flex items-center space-x-2.5 bg-slate-900 hover:bg-slate-800 text-slate-200 hover:text-white px-4 py-2 rounded-xl border border-slate-700/80 hover:border-amber-400/50 text-sm font-medium transition-all shadow-sm">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                    </svg>
+                    <span class="hidden sm:inline">Sign in with Google</span>
+                    <span class="sm:hidden">Login</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE NAVIGATION TABS -->
+    <div class="md:hidden flex border-b border-slate-800 bg-slate-950 p-1.5">
+        <button id="mobile-nav-chat" onclick="switchTab('chat')" class="flex-1 py-2 text-center text-xs font-bold rounded-lg bg-brand-blue text-white">
+            <i class="fa-solid fa-comments mr-1"></i> Eshan AI
+        </button>
+        <button id="mobile-nav-studio" onclick="switchTab('studio')" class="flex-1 py-2 text-center text-xs font-bold rounded-lg text-slate-400">
+            <i class="fa-solid fa-wand-magic-sparkles mr-1 text-amber-400"></i> Photo Studio
+        </button>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-7xl mx-auto w-full flex-1 p-3 sm:p-6 flex flex-col min-h-0">
+        
+        <!-- SECTION 1: ESHAN AI CHAT ASSISTANT -->
+        <section id="chat-section" class="flex-1 flex flex-col h-[calc(100vh-140px)] max-h-[880px] rounded-2xl glass-panel overflow-hidden border border-slate-800 shadow-2xl">
+            
+            <!-- Chat Status Bar -->
+            <div class="bg-slate-950/80 px-4 py-3 border-b border-slate-800/80 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="relative">
+                        <div class="w-3 h-3 bg-emerald-500 rounded-full"></div>
+                        <div class="absolute inset-0 bg-emerald-500 rounded-full animate-ping opacity-75"></div>
+                    </div>
+                    <div>
+                        <h2 class="text-sm font-bold text-slate-100 flex items-center gap-2">
+                            Eshan Intelligence Core
+                            <span class="text-[10px] font-mono font-normal bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded border border-blue-500/20">v3.5 Turbo</span>
+                        </h2>
+                        <p class="text-[11px] text-slate-400">Ask any question, code, math, Sinhala, English or general knowledge</p>
+                    </div>
+                </div>
+                <button onclick="clearChat()" class="text-xs text-slate-400 hover:text-amber-400 px-2.5 py-1.5 rounded-lg border border-slate-800 hover:border-amber-400/30 transition-all flex items-center gap-1.5">
+                    <i class="fa-solid fa-rotate-right"></i>
+                    <span class="hidden sm:inline">New Conversation</span>
+                </button>
+            </div>
+
+            <!-- Chat Messages Log Window -->
+            <div id="chat-box" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5 bg-slate-950/40">
+                
+                <!-- Welcome Assistant Message -->
+                <div class="flex items-start space-x-3 max-w-3xl">
+                    <div class="w-9 h-9 rounded-xl bg-slate-900 border border-amber-400/40 flex items-center justify-center shrink-0 shadow-md">
+                        <i class="fa-solid fa-brain text-amber-400 text-sm"></i>
+                    </div>
+                    <div class="glass-card p-4 sm:p-5 rounded-2xl rounded-tl-sm border border-slate-800/80 text-slate-200 text-sm leading-relaxed space-y-3">
+                        <div class="font-bold text-base text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-amber-300">
+                            ආයුබෝවන්! Hello! Welcome to Eshan Ai 👋
+                        </div>
+                        <p>
+                            මම <strong>Eshan Ai</strong>. ඔබට ඕනෑම ප්‍රශ්නයක් මගෙන් අහන්න පුළුවන් (Sinhala, English, or any language). මාගෙන් නොදන්න දෙයක් නැති තරම්!
+                        </p>
+                        <p class="text-slate-300">
+                            Here is what I can do for you:
+                        </p>
+                        <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-300 pt-1">
+                            <li class="flex items-center gap-2 bg-slate-900/60 p-2 rounded-lg border border-slate-800">
+                                <i class="fa-solid fa-circle-check text-amber-400"></i> Answer any complex question
+                            </li>
+                            <li class="flex items-center gap-2 bg-slate-900/60 p-2 rounded-lg border border-slate-800">
+                                <i class="fa-solid fa-code text-blue-400"></i> Write & debug code
+                            </li>
+                            <li class="flex items-center gap-2 bg-slate-900/60 p-2 rounded-lg border border-slate-800">
+                                <i class="fa-solid fa-image text-amber-400"></i> Photo Editing & Generation
+                            </li>
+                            <li class="flex items-center gap-2 bg-slate-900/60 p-2 rounded-lg border border-slate-800">
+                                <i class="fa-solid fa-globe text-blue-400"></i> Translation & Essays
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Quick Suggestion Prompts -->
+            <div class="px-4 py-2 bg-slate-950/70 border-t border-slate-900 flex items-center space-x-2 overflow-x-auto text-xs no-scrollbar">
+                <span class="text-slate-500 font-semibold uppercase text-[10px] shrink-0 mr-1"><i class="fa-solid fa-bolt text-amber-400 mr-1"></i>Quick:</span>
+                <button onclick="useQuickPrompt('Tell me something amazing about quantum physics in simple terms')" class="shrink-0 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-amber-300 px-3 py-1.5 rounded-full border border-slate-800 transition-all text-xs">
+                    🌌 Quantum Physics
+                </button>
+                <button onclick="useQuickPrompt('Write a python function to scrape a website and format JSON')" class="shrink-0 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-blue-300 px-3 py-1.5 rounded-full border border-slate-800 transition-all text-xs">
+                    💻 Python Code Script
+                </button>
+                <button onclick="useQuickPrompt('ශ්‍රී ලංකාවේ ප්‍රධාන සංචාරක ස්ථාන 5ක් ගැන විස්තර කරන්න')" class="shrink-0 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-amber-300 px-3 py-1.5 rounded-full border border-slate-800 transition-all text-xs">
+                    🇱🇰 Sri Lanka Tourism
+                </button>
+                <button onclick="useQuickPrompt('How can I start a successful online business in 2026?')" class="shrink-0 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-blue-300 px-3 py-1.5 rounded-full border border-slate-800 transition-all text-xs">
+                    🚀 Business Advice
+                </button>
+            </div>
+
+            <!-- Chat Input Area -->
+            <div class="p-3 sm:p-4 bg-slate-950 border-t border-slate-800/80">
+                <form id="chat-form" onsubmit="handleChatSubmit(event)" class="relative flex items-center">
+                    <textarea 
+                        id="user-input" 
+                        rows="1"
+                        placeholder="Eshan Ai ගෙන් ඕනෑම දෙයක් අහන්න... (Ask anything)..." 
+                        class="w-full bg-slate-900 text-slate-100 text-sm rounded-xl pl-4 pr-12 py-3.5 focus:outline-none focus:ring-2 focus:ring-brand-blue border border-slate-800 resize-none transition-all placeholder:text-slate-500"
+                        onkeydown="handleKeyDown(event)"
+                    ></textarea>
+                    
+                    <button type="submit" id="send-btn" class="absolute right-2.5 bg-gradient-to-r from-brand-blue via-blue-600 to-amber-500 hover:opacity-90 text-white p-2.5 rounded-lg transition-all shadow-md flex items-center justify-center">
+                        <i class="fa-solid fa-paper-plane text-xs"></i>
+                    </button>
+                </form>
+                <div class="flex items-center justify-between text-[11px] text-slate-500 mt-2 px-1">
+                    <span>Press Enter to send message</span>
+                    <span class="flex items-center gap-1"><i class="fa-solid fa-shield-halved text-amber-400/80"></i> Powered by Gemini 3 Flash Intelligence</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: ESHAN AI PHOTO STUDIO & IMAGE GENERATOR -->
+        <section id="studio-section" class="hidden flex-1 flex flex-col space-y-6">
+            
+            <div class="glass-panel p-6 rounded-2xl border border-slate-800">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+                    <div>
+                        <h2 class="text-2xl font-bold font-display text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-amber-300 to-yellow-400 flex items-center gap-2">
+                            <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i> Eshan Ai Photo Studio
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1">Upload any photo and tell Eshan Ai how to edit it, or generate brand new AI artwork from scratch.</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs bg-amber-500/10 text-amber-300 px-3 py-1 rounded-full border border-amber-500/20 font-medium">
+                            Model: gemini-3.1-flash-image
+                        </span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+                    
+                    <!-- Left: Upload & Prompt Controls -->
+                    <div class="space-y-5">
+                        
+                        <!-- Upload Box -->
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-400 mb-2">
+                                1. Upload Photo for Editing (Optional)
+                            </label>
+                            <div 
+                                id="drop-zone" 
+                                onclick="document.getElementById('studio-file-input').click()"
+                                ondragover="handleDragOver(event)"
+                                ondragleave="handleDragLeave(event)"
+                                ondrop="handleDrop(event)"
+                                class="border-2 border-dashed border-slate-700 hover:border-amber-400/60 bg-slate-900/60 rounded-xl p-5 text-center cursor-pointer transition-all flex flex-col items-center justify-center min-h-[160px]"
+                            >
+                                <input type="file" id="studio-file-input" accept="image/*" class="hidden" onchange="handleFileSelect(event)">
+                                
+                                <div id="upload-placeholder" class="flex flex-col items-center space-y-2">
+                                    <div class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center text-amber-400 text-xl border border-slate-700">
+                                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                                    </div>
+                                    <p class="text-xs font-semibold text-slate-300">Click to upload photo or drag & drop here</p>
+                                    <p class="text-[11px] text-slate-500">PNG, JPG, WEBP accepted</p>
+                                </div>
+
+                                <div id="upload-preview-container" class="hidden relative w-full h-36 flex items-center justify-center">
+                                    <img id="upload-preview-img" src="" alt="Uploaded Photo" class="max-h-full max-w-full rounded-lg object-contain shadow-lg border border-amber-400/30">
+                                    <button onclick="removeUploadedImage(event)" class="absolute top-1 right-1 bg-red-600/80 hover:bg-red-600 text-white w-6 h-6 rounded-full text-xs flex items-center justify-center transition-all shadow">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Prompt Input -->
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-400 mb-2">
+                                2. Describe Edit or Image Request
+                            </label>
+                            <textarea 
+                                id="studio-prompt" 
+                                rows="3"
+                                placeholder="E.g. 'Change the background to a futuristic luxury office with gold and blue lighting' OR 'A futuristic cybernetic lion logo with gold accents'..."
+                                class="w-full bg-slate-900 text-slate-100 text-sm rounded-xl p-3.5 border border-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-400/80 resize-none placeholder:text-slate-500"
+                            ></textarea>
+                        </div>
+
+                        <!-- Quick Edit Presets -->
+                        <div>
+                            <span class="block text-[11px] font-semibold text-slate-400 mb-2">Quick Edit Presets:</span>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="setStudioPreset('Enhance quality, add dramatic gold and blue cinematic lighting and vibrant details')" class="bg-slate-900 hover:bg-slate-800 text-xs text-slate-300 px-3 py-1.5 rounded-lg border border-slate-800">
+                                    ✨ Cinematic Lighting
+                                </button>
+                                <button onclick="setStudioPreset('Convert into a futuristic sci-fi cyberpunk digital art render')" class="bg-slate-900 hover:bg-slate-800 text-xs text-slate-300 px-3 py-1.5 rounded-lg border border-slate-800">
+                                    🤖 Sci-Fi Render
+                                </button>
+                                <button onclick="setStudioPreset('Change background to a modern dark gold luxury studio workspace')" class="bg-slate-900 hover:bg-slate-800 text-xs text-slate-300 px-3 py-1.5 rounded-lg border border-slate-800">
+                                    🏢 Luxury Background
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Generate Button -->
+                        <button 
+                            id="studio-generate-btn" 
+                            onclick="generateOrEditImage()" 
+                            class="w-full bg-gradient-to-r from-brand-blue via-blue-600 to-amber-500 hover:opacity-95 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-500/20 flex items-center justify-center space-x-2 transition-all"
+                        >
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            <span>Generate / Edit Photo</span>
+                        </button>
+
+                    </div>
+
+                    <!-- Right: Output Result Preview Canvas -->
+                    <div class="flex flex-col">
+                        <label class="block text-xs font-bold uppercase text-slate-400 mb-2">
+                            3. Generated / Edited Result
+                        </label>
+                        <div class="flex-1 min-h-[300px] bg-slate-950/80 border border-slate-800 rounded-xl flex flex-col items-center justify-center p-4 relative overflow-hidden">
+                            
+                            <!-- Initial Empty State -->
+                            <div id="studio-result-empty" class="text-center p-6 space-y-3">
+                                <div class="w-16 h-16 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center mx-auto text-slate-600 text-2xl">
+                                    <i class="fa-solid fa-image"></i>
+                                </div>
+                                <p class="text-xs text-slate-400 font-medium">Your generated or edited image will appear here</p>
+                            </div>
+
+                            <!-- Loading Spinner State -->
+                            <div id="studio-loading-state" class="hidden text-center space-y-4">
+                                <div class="relative w-16 h-16 mx-auto">
+                                    <div class="w-16 h-16 rounded-full border-4 border-slate-800 border-t-amber-400 border-r-brand-blue animate-spin"></div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-amber-300">Eshan Ai Processing Photo...</p>
+                                    <p class="text-xs text-slate-500 mt-1">Please wait (approx 4-8 seconds)...</p>
+                                </div>
+                            </div>
+
+                            <!-- Output Image Display -->
+                            <div id="studio-result-container" class="hidden w-full h-full flex flex-col items-center justify-center space-y-3">
+                                <img id="studio-result-img" src="" alt="Edited Result" class="max-h-[360px] w-auto rounded-lg shadow-2xl border border-amber-400/40 object-contain">
+                                <div class="flex items-center space-x-3 pt-2">
+                                    <a id="download-btn" href="#" download="eshan-ai-photo.png" class="bg-gradient-to-r from-amber-500 to-yellow-600 hover:opacity-90 text-slate-950 text-xs font-bold px-4 py-2 rounded-lg flex items-center gap-1.5 shadow-md">
+                                        <i class="fa-solid fa-download"></i> Download High Res
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-slate-900 bg-slate-950/90 py-4 px-6 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+            <div class="flex items-center space-x-2">
+                <span class="font-bold text-slate-300">Eshan Ai</span>
+                <span>• Designed for everyone to use freely</span>
+            </div>
+            <div>
+                © 2026 Eshan Ai. Powered by Gemini Flash Intelligence.
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL / ALERT UI -->
+    <div id="custom-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+        <div class="glass-panel p-6 rounded-2xl max-w-md w-full border border-amber-400/40 shadow-2xl space-y-4">
+            <h3 id="modal-title" class="text-lg font-bold text-amber-300">Notification</h3>
+            <p id="modal-body" class="text-xs text-slate-300 leading-relaxed"></p>
+            <div class="flex justify-end">
+                <button onclick="closeModal()" class="bg-brand-blue hover:bg-blue-600 text-white text-xs font-bold px-4 py-2 rounded-lg">
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // State management
+        let currentTab = 'chat';
+        let uploadedBase64Image = null;
+        let isUserLoggedIn = false;
+        let chatHistory = [];
+
+        // API Key configuration
+        const apiKey = ""; // Canvas provides runtime key when empty
+        const textApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+        const imageApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image:generateContent?key=${apiKey}`;
+
+        // Initialize App
+        window.onload = function() {
+            console.log("Eshan Ai loaded successfully");
+        };
+
+        // Navigation tab switcher
+        function switchTab(tab) {
+            currentTab = tab;
+            const chatSec = document.getElementById('chat-section');
+            const studioSec = document.getElementById('studio-section');
+            const navChatBtn = document.getElementById('nav-chat-btn');
+            const navStudioBtn = document.getElementById('nav-studio-btn');
+            const mobileChatBtn = document.getElementById('mobile-nav-chat');
+            const mobileStudioBtn = document.getElementById('mobile-nav-studio');
+
+            if (tab === 'chat') {
+                chatSec.classList.remove('hidden');
+                studioSec.classList.add('hidden');
+                
+                navChatBtn.className = "flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 bg-gradient-to-r from-brand-blue to-blue-600 text-white shadow-md";
+                navStudioBtn.className = "flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-amber-300 transition-all duration-200";
+                
+                mobileChatBtn.className = "flex-1 py-2 text-center text-xs font-bold rounded-lg bg-brand-blue text-white";
+                mobileStudioBtn.className = "flex-1 py-2 text-center text-xs font-bold rounded-lg text-slate-400";
+            } else {
+                chatSec.classList.add('hidden');
+                studioSec.classList.remove('hidden');
+
+                navStudioBtn.className = "flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 bg-gradient-to-r from-amber-500 to-yellow-600 text-slate-950 shadow-md";
+                navChatBtn.className = "flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-blue-300 transition-all duration-200";
+
+                mobileStudioBtn.className = "flex-1 py-2 text-center text-xs font-bold rounded-lg bg-amber-500 text-slate-950";
+                mobileChatBtn.className = "flex-1 py-2 text-center text-xs font-bold rounded-lg text-slate-400";
+            }
+        }
+
+        // Google Authentication Simulation
+        function handleGoogleSignIn() {
+            document.getElementById('google-login-btn').classList.add('hidden');
+            const profileArea = document.getElementById('user-profile-area');
+            profileArea.classList.remove('hidden');
+            profileArea.classList.add('flex');
+            
+            // Random demo user details
+            document.getElementById('user-name').innerText = "Google User";
+            document.getElementById('user-avatar').src = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80";
+            isUserLoggedIn = true;
+
+            showModal("Sign In Successful", "Welcome! You are now logged in via Google Authentication.");
+        }
+
+        function handleGoogleSignOut() {
+            document.getElementById('google-login-btn').classList.remove('hidden');
+            const profileArea = document.getElementById('user-profile-area');
+            profileArea.classList.add('hidden');
+            profileArea.classList.remove('flex');
+            isUserLoggedIn = false;
+        }
+
+        // CHAT ASSISTANT LOGIC
+        function handleKeyDown(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                document.getElementById('chat-form').dispatchEvent(new Event('submit'));
+            }
+        }
+
+        function useQuickPrompt(text) {
+            document.getElementById('user-input').value = text;
+            handleChatSubmit(new Event('submit'));
+        }
+
+        function clearChat() {
+            const chatBox = document.getElementById('chat-box');
+            chatBox.innerHTML = `
+                <div class="flex items-start space-x-3 max-w-3xl">
+                    <div class="w-9 h-9 rounded-xl bg-slate-900 border border-amber-400/40 flex items-center justify-center shrink-0 shadow-md">
+                        <i class="fa-solid fa-brain text-amber-400 text-sm"></i>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl border border-slate-800 text-slate-200 text-sm">
+                        Conversation restarted! Ask me anything.
+                    </div>
+                </div>
+            `;
+            chatHistory = [];
+        }
+
+        async function handleChatSubmit(e) {
+            e.preventDefault();
+            const inputEl = document.getElementById('user-input');
+            const query = inputEl.value.trim();
+            if (!query) return;
+
+            // Clear input
+            inputEl.value = '';
+
+            // Append User Message to UI
+            appendUserMessage(query);
+
+            // Create typing indicator UI
+            const typingId = appendTypingIndicator();
+
+            // Prepare Gemini payload
+            const systemPrompt = "You are Eshan Ai, an intelligent, all-knowing, friendly AI assistant created by Eshan. You are polite, knowledgeable in programming, science, general knowledge, languages, and Sinhala. Provide thorough, structured, and helpful responses. When replying in Sinhala, use clear Sinhala.";
+            
+            chatHistory.push({ role: 'user', parts: [{ text: query }] });
+
+            const payload = {
+                contents: chatHistory,
+                systemInstruction: { parts: [{ text: systemPrompt }] }
+            };
+
+            const startTime = Date.now();
+
+            try {
+                // Call Gemini API with retries
+                const response = await fetchWithRetry(textApiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+                const replyText = data?.candidates?.[0]?.content?.parts?.[0]?.text || "I apologize, but I couldn't process that request at the moment.";
+
+                // Calculate response delay to ensure standard 2-4 sec natural speed
+                const elapsedTime = Date.now() - startTime;
+                const minDelay = 2000; // 2 seconds minimum to simulate natural thinking
+                const remainingDelay = Math.max(0, minDelay - elapsedTime);
+
+                setTimeout(() => {
+                    // Remove typing indicator
+                    removeElement(typingId);
+                    
+                    // Append AI Message
+                    appendAiMessage(replyText);
+                    
+                    // Store in history
+                    chatHistory.push({ role: 'model', parts: [{ text: replyText }] });
+                }, remainingDelay);
+
+            } catch (err) {
+                console.error("Error generating text:", err);
+                removeElement(typingId);
+                appendAiMessage("I encountered a connection issue. Please check your network and try again.");
+            }
+        }
+
+        function appendUserMessage(msg) {
+            const chatBox = document.getElementById('chat-box');
+            const msgHtml = `
+                <div class="flex items-start justify-end space-x-3">
+                    <div class="bg-gradient-to-r from-brand-blue to-blue-700 text-white p-4 rounded-2xl rounded-tr-sm max-w-2xl text-sm leading-relaxed shadow-md">
+                        ${escapeHtml(msg)}
+                    </div>
+                    <div class="w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center shrink-0 text-slate-300 text-xs">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                </div>
+            `;
+            chatBox.insertAdjacentHTML('beforeend', msgHtml);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function appendTypingIndicator() {
+            const chatBox = document.getElementById('chat-box');
+            const id = 'typing-' + Date.now();
+            const indicatorHtml = `
+                <div id="${id}" class="flex items-start space-x-3 max-w-xl">
+                    <div class="w-9 h-9 rounded-xl bg-slate-900 border border-amber-400/40 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-brain text-amber-400 text-sm"></i>
+                    </div>
+                    <div class="glass-card px-4 py-3 rounded-2xl flex items-center space-x-2 border border-slate-800">
+                        <span class="text-xs text-amber-300 font-medium">Eshan Ai is thinking</span>
+                        <div class="flex space-x-1 pl-2">
+                            <div class="w-1.5 h-1.5 bg-amber-400 rounded-full typing-dot"></div>
+                            <div class="w-1.5 h-1.5 bg-blue-400 rounded-full typing-dot"></div>
+                            <div class="w-1.5 h-1.5 bg-amber-400 rounded-full typing-dot"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            chatBox.insertAdjacentHTML('beforeend', indicatorHtml);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            return id;
+        }
+
+        function appendAiMessage(text) {
+            const chatBox = document.getElementById('chat-box');
+            const formattedText = formatMarkdownText(text);
+            const msgHtml = `
+                <div class="flex items-start space-x-3 max-w-3xl">
+                    <div class="w-9 h-9 rounded-xl bg-slate-900 border border-amber-400/40 flex items-center justify-center shrink-0 shadow-md">
+                        <i class="fa-solid fa-brain text-amber-400 text-sm"></i>
+                    </div>
+                    <div class="glass-card p-4 sm:p-5 rounded-2xl rounded-tl-sm border border-slate-800/80 text-slate-200 text-sm leading-relaxed space-y-3">
+                        <div>${formattedText}</div>
+                        <div class="pt-2 flex items-center justify-between border-t border-slate-800/60 text-xs text-slate-400">
+                            <span class="text-[10px] text-amber-400/80 font-mono">Eshan Ai Intelligence</span>
+                            <button onclick="copyToClipboard(this)" data-text="${escapeAttribute(text)}" class="hover:text-amber-300 flex items-center gap-1">
+                                <i class="fa-regular fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            chatBox.insertAdjacentHTML('beforeend', msgHtml);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        // PHOTO STUDIO & IMAGE EDITING LOGIC
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('drop-zone').classList.add('border-amber-400');
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('drop-zone').classList.remove('border-amber-400');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('drop-zone').classList.remove('border-amber-400');
+            const files = e.dataTransfer.files;
+            if (files && files[0]) {
+                processImageFile(files[0]);
+            }
+        }
+
+        function handleFileSelect(e) {
+            const files = e.target.files;
+            if (files && files[0]) {
+                processImageFile(files[0]);
+            }
+        }
+
+        function processImageFile(file) {
+            if (!file.type.startsWith('image/')) {
+                showModal("Invalid File", "Please upload an image file (PNG, JPG, or WEBP).");
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                uploadedBase64Image = evt.target.result;
+                document.getElementById('upload-placeholder').classList.add('hidden');
+                document.getElementById('upload-preview-container').classList.remove('hidden');
+                document.getElementById('upload-preview-img').src = uploadedBase64Image;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeUploadedImage(e) {
+            e.stopPropagation();
+            uploadedBase64Image = null;
+            document.getElementById('studio-file-input').value = '';
+            document.getElementById('upload-placeholder').classList.remove('hidden');
+            document.getElementById('upload-preview-container').classList.add('hidden');
+        }
+
+        function setStudioPreset(presetText) {
+            document.getElementById('studio-prompt').value = presetText;
+        }
+
+        async function generateOrEditImage() {
+            const promptText = document.getElementById('studio-prompt').value.trim();
+
+            if (!promptText) {
+                showModal("Input Required", "Please enter a text description of what you want to generate or edit.");
+                return;
+            }
+
+            // UI States
+            document.getElementById('studio-result-empty').classList.add('hidden');
+            document.getElementById('studio-result-container').classList.add('hidden');
+            document.getElementById('studio-loading-state').classList.remove('hidden');
+            
+            const btn = document.getElementById('studio-generate-btn');
+            btn.disabled = true;
+            btn.classList.add('opacity-50');
+
+            try {
+                let parts = [];
+                parts.push({ text: promptText });
+
+                // If user uploaded an image -> Image-to-Image / Editing mode
+                if (uploadedBase64Image) {
+                    const base64Data = uploadedBase64Image.split(',')[1];
+                    const mimeType = uploadedBase64Image.split(';')[0].split(':')[1];
+                    parts.push({
+                        inlineData: {
+                            mimeType: mimeType,
+                            data: base64Data
+                        }
+                    });
+                }
+
+                const payload = {
+                    contents: [{
+                        role: 'user',
+                        parts: parts
+                    }],
+                    generationConfig: {
+                        responseModalities: ['IMAGE', 'TEXT']
+                    }
+                };
+
+                const response = await fetchWithRetry(imageApiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                const part = result?.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
+
+                if (part && part.inlineData) {
+                    const outputImageUrl = `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
+                    
+                    document.getElementById('studio-result-img').src = outputImageUrl;
+                    document.getElementById('download-btn').href = outputImageUrl;
+                    
+                    document.getElementById('studio-loading-state').classList.add('hidden');
+                    document.getElementById('studio-result-container').classList.remove('hidden');
+                } else {
+                    throw new Error("No image was returned from the API.");
+                }
+
+            } catch (err) {
+                console.error("Studio Error:", err);
+                document.getElementById('studio-loading-state').classList.add('hidden');
+                document.getElementById('studio-result-empty').classList.remove('hidden');
+                showModal("Generation Failed", "Could not process image request. Please try again with a different prompt.");
+            } finally {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50');
+            }
+        }
+
+        // HELPER FUNCTIONS
+        async function fetchWithRetry(url, options, retries = 3, backoff = 1000) {
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const res = await fetch(url, options);
+                    if (res.ok) return res;
+                } catch (e) {
+                    if (i === retries - 1) throw e;
+                }
+                await new Promise(r => setTimeout(r, backoff * Math.pow(2, i)));
+            }
+            return fetch(url, options);
+        }
+
+        function formatMarkdownText(text) {
+            if (!text) return '';
+            let formatted = text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+
+            // Code blocks
+            formatted = formatted.replace(/```([\s\S]*?)```/g, '<pre class="bg-slate-900/90 p-3 rounded-lg border border-slate-800 font-mono text-xs text-amber-300 overflow-x-auto my-2"><code>$1</code></pre>');
+            // Inline code
+            formatted = formatted.replace(/`([^`]+)`/g, '<code class="bg-slate-800 text-amber-300 px-1.5 py-0.5 rounded text-xs">$1</code>');
+            // Bold
+            formatted = formatted.replace(/\*\*([^*]+)\*\*/g, '<strong class="text-amber-300 font-bold">$1</strong>');
+            // Linebreaks
+            formatted = formatted.replace(/\n/g, '<br>');
+
+            return formatted;
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/[&<>"']/g, function(m) {
+                return {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#039;'
+                }[m];
+            });
+        }
+
+        function escapeAttribute(str) {
+            return str.replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+        }
+
+        function removeElement(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        }
+
+        function copyToClipboard(btn) {
+            const text = btn.getAttribute('data-text');
+            const tempInput = document.createElement('textarea');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            btn.innerHTML = `<i class="fa-solid fa-check text-emerald-400"></i> Copied!`;
+            setTimeout(() => {
+                btn.innerHTML = `<i class="fa-regular fa-copy"></i> Copy`;
+            }, 2000);
+        }
+
+        function showModal(title, body) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-body').innerText = body;
+            document.getElementById('custom-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('custom-modal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
